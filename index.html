@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Înscriere Însoțitori – Race for the Cure 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      padding: 1.5rem 1rem;
+    }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 1.5rem; }
+    .header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .header p { font-size: 13px; color: #666; }
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 13px; color: #555; margin-bottom: 4px; }
+    .req { color: #e53e3e; }
+    input[type=text], select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      color: #1a1a1a;
+    }
+    input[type=text]:focus, select:focus {
+      outline: none;
+      border-color: #4a90e2;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .companion-card {
+      background: #f9f9f9;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 10px;
+    }
+    .companion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .companion-title { font-size: 14px; font-weight: 500; }
+    .btn-remove {
+      font-size: 12px;
+      color: #e53e3e;
+      background: none;
+      border: 1px solid #e53e3e;
+      border-radius: 6px;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+    .btn-add {
+      width: 100%;
+      padding: 9px;
+      border-radius: 8px;
+      background: #f5f5f5;
+      border: 1px dashed #ccc;
+      color: #555;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    .btn-add:hover { background: #ececec; }
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: #4a90e2;
+      border: none;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-submit:hover { background: #357abd; }
+    .btn-submit:disabled { opacity: 0.6; pointer-events: none; }
+    .counter { font-size: 12px; color: #888; margin-bottom: 10px; }
+    .success {
+      display: none;
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+    .success-icon { font-size: 52px; margin-bottom: 1rem; }
+    .success-title { font-size: 18px; font-weight: 600; margin-bottom: 0.5rem; }
+    .success-sub { font-size: 14px; color: #666; }
+    .deadline {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin-top: 10px;
+    }
+    @media (max-width: 400px) {
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>🏃 Race for the Cure 2026</h1>
+      <p>Înscriere însoțitori – GO Scholarship</p>
+    </div>
+
+    <div id="form-content">
+      <div class="card">
+        <p class="card-title">Cine completează?</p>
+        <div class="row">
+          <div class="field">
+            <label>Numele tău <span class="req">*</span></label>
+            <input type="text" id="sportiv-nume" placeholder="Nume și prenume" />
+          </div>
+          <div class="field">
+            <label>Sportul tău <span class="req">*</span></label>
+            <input type="text" id="sportiv-sport" placeholder="ex. Tenis, Înot..." />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-title">Însoțitori</p>
+        <p class="counter" id="counter">0 însoțitori adăugați</p>
+        <div id="companions-list"></div>
+        <button class="btn-add" onclick="addCompanion()">+ Adaugă însoțitor</button>
+      </div>
+
+      <button class="btn-submit" id="btn-submit" onclick="submitForm()">Trimite înregistrarea</button>
+      <p class="deadline">⏳ Deadline: 17 mai 2026</p>
+    </div>
+
+    <div class="card success" id="success">
+      <div class="success-icon">✅</div>
+      <p class="success-title">Înregistrare trimisă!</p>
+      <p class="success-sub">Datele au fost salvate. Ne vedem pe 23 mai la Rondul Kiseleff! 🎉</p>
+    </div>
+  </div>
+
+  <script>
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycby1IfOWruJdUXeJngvSC5rVBjPYxrnNtZ53s_7Lxqc1n64ihsTiomx-dDTb_RTk8NyXlQ/exec';
+    let count = 0;
+
+    function addCompanion() {
+      count++;
+      const list = document.getElementById('companions-list');
+      const div = document.createElement('div');
+      div.className = 'companion-card';
+      div.id = 'companion-' + count;
+      div.innerHTML = `
+        <div class="companion-header">
+          <span class="companion-title">Însoțitor ${count}</span>
+          <button class="btn-remove" onclick="removeCompanion(${count})">Elimină</button>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Nume și prenume <span class="req">*</span></label>
+            <input type="text" class="ins-nume" placeholder="Nume însoțitor" />
+          </div>
+          <div class="field">
+            <label>Mărime tricou <span class="req">*</span></label>
+            <select class="ins-tricou">
+              <option value="">— selectează —</option>
+              <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+        </div>
+      `;
+      list.appendChild(div);
+      updateCounter();
+    }
+
+    function removeCompanion(id) {
+      const el = document.getElementById('companion-' + id);
+      if (el) el.remove();
+      updateCounter();
+    }
+
+    function updateCounter() {
+      const n = document.querySelectorAll('.companion-card').length;
+      document.getElementById('counter').textContent =
+        n === 0 ? '0 însoțitori adăugați' : n + (n === 1 ? ' însoțitor adăugat' : ' însoțitori adăugați');
+    }
+
+    async function submitForm() {
+      const nume = document.getElementById('sportiv-nume').value.trim();
+      const sport = document.getElementById('sportiv-sport').value.trim();
+
+      if (!nume || !sport) {
+        alert('Te rugăm completează numele și sportul tău.');
+        return;
+      }
+
+      const companions = [];
+      let valid = true;
+      document.querySelectorAll('.companion-card').forEach(card => {
+        const n = card.querySelector('.ins-nume').value.trim();
+        const t = card.querySelector('.ins-tricou').value;
+        if (!n || !t) { valid = false; }
+        companions.push({ nume: n, tricou: t });
+      });
+
+      if (!valid) {
+        alert('Te rugăm completează numele și mărimea tricou pentru toți însoțitorii.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit');
+      btn.textContent = 'Se trimite...';
+      btn.disabled = true;
+
+      try {
+        await fetch(SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sportiv: nume, sport: sport, insotitori: companions })
+        });
+
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('success').style.display = 'block';
+      } catch (err) {
+        alert('A apărut o eroare. Te rugăm încearcă din nou.');
+        btn.textContent = 'Trimite înregistrarea';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
+EOF
