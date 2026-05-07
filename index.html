@@ -34,15 +34,43 @@
       line-height: 1.4;
     }
     .notice {
-      background: #fff8e1;
-      border: 1px solid #ffe082;
+      background: #f0f7ff;
+      border: 1px solid #bdd7f5;
       border-radius: 10px;
-      padding: 10px 14px;
+      padding: 12px 14px;
       font-size: 13px;
-      color: #7a5c00;
-      line-height: 1.6;
+      color: #1a3a5c;
+      line-height: 1.7;
       text-align: left;
     }
+    .notice-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
+    .notice-row:last-child { margin-bottom: 0; }
+    .notice-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+    .gdpr-block { margin-top: 4px; }
+    .gdpr-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0e0ea;
+    }
+    .gdpr-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .gdpr-item input[type=checkbox] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 2px;
+      accent-color: #e8318a;
+      cursor: pointer;
+    }
+    .gdpr-item label {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.5;
+      font-weight: 400;
+      cursor: pointer;
+    }
+    .gdpr-item label a { color: #e8318a; }
     .card {
       background: #fff;
       border: 1px solid #e8e8e8;
@@ -166,8 +194,10 @@
         <span class="header-race">🏃‍♂️ Race for the Cure</span>
       </div>
       <div id="header-notice" class="notice">
-        ⚠️ Acest formular se completează doar de către sportivii care vin însoțiți.<br>
-        Dacă nu aveți însoțitori, nu este necesar să completați acest formular.
+        <div class="notice-row"><span class="notice-icon">🗓️</span><span>23 mai (sâmbătă)</span></div>
+        <div class="notice-row"><span class="notice-icon">📍</span><span>Rondul Kiseleff, București</span></div>
+        <div class="notice-row"><span class="notice-icon">📅</span><span>08:00 – 09:30 → ridicare kit-uri / check-in</span></div>
+        <div class="notice-row"><span class="notice-icon">🏁</span><span>10:00 → start 5K Run/Walk</span></div>
       </div>
     </div>
 
@@ -183,24 +213,34 @@
             <input type="text" id="sportiv-nume" placeholder="Nume și prenume" />
           </div>
           <div class="field">
-            <label>Sportul practicat <span class="req">*</span></label>
-            <input type="text" id="sportiv-sport" placeholder="ex. Tenis, Înot..." />
+            <label>Mărime tricou <span class="req">*</span></label>
+            <select id="sportiv-tricou">
+              <option value="">— selectează —</option>
+              <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+            </select>
           </div>
         </div>
       </div>
 
       <div class="card">
         <p class="card-title">
-          <span class="card-title-icon">👥</span>
-          Însoțitori
+          <span class="card-title-icon">📋</span>
+          Acorduri obligatorii
         </p>
-        <p class="counter" id="counter">0 însoțitori adăugați</p>
-        <div id="companions-list"></div>
-        <button class="btn-add" onclick="addCompanion()">+ Adaugă însoțitor</button>
+        <div class="gdpr-block">
+          <div class="gdpr-item">
+            <input type="checkbox" id="gdpr1" />
+            <label for="gdpr1">Sunt de acord cu prelucrarea datelor cu caracter personal în scopul înscrierii la eveniment și cu utilizarea fotografiilor/materialelor video realizate în timpul cursei în scopul promovării proiectului (GDPR) <span class="req">*</span></label>
+          </div>
+          <div class="gdpr-item">
+            <input type="checkbox" id="gdpr2" />
+            <label for="gdpr2">Am citit și sunt de acord cu regulamentul de participare și criteriile menționate pe site-ul oficial al cursei: <a href="https://www.raceforthecure.eu/ro" target="_blank">raceforthecure.eu/ro</a> <span class="req">*</span></label>
+          </div>
+        </div>
       </div>
 
       <button class="btn-submit" id="btn-submit" onclick="submitForm()">Trimite înregistrarea</button>
-      <p class="deadline">⏳ Deadline: 12 mai 2026</p>
+      <p class="deadline">⏳ Deadline: 17 mai 2026</p>
     </div>
 
     <div class="card success" id="success">
@@ -212,15 +252,14 @@
     <div class="card closed" id="closed">
       <div class="closed-icon">🔒</div>
       <p class="closed-title">Înscrierile s-au încheiat!</p>
-      <p class="closed-sub">Vă mulțumim!</p>
+      <p class="closed-sub">Înscrierile pentru GO Scholarship | Race for the Cure s-au încheiat.<br><br>Mulțumim tuturor celor care s-au înscris!<br>Ne vedem pe 23 mai la Rondul Kiseleff 🏃‍♂️</p>
     </div>
   </div>
 
   <script>
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycby1IfOWruJdUXeJngvSC5rVBjPYxrnNtZ53s_7Lxqc1n64ihsTiomx-dDTb_RTk8NyXlQ/exec';
-    let count = 0;
 
-    // Verifica daca inscrierile sunt inchise (dupa 12 mai 2026)
+    // Verifica daca inscrierile sunt inchise (dupa 17 mai 2026)
     const deadline = new Date('2026-05-18T00:00:00');
     if (new Date() >= deadline) {
       document.getElementById('form-content').style.display = 'none';
@@ -228,72 +267,19 @@
       document.getElementById('closed').style.display = 'block';
     }
 
-    function addCompanion() {
-      count++;
-      const list = document.getElementById('companions-list');
-      const div = document.createElement('div');
-      div.className = 'companion-card';
-      div.id = 'companion-' + count;
-      div.innerHTML = `
-        <div class="companion-header">
-          <span class="companion-title">Însoțitor ${count}</span>
-          <button class="btn-remove" onclick="removeCompanion(${count})">Elimină</button>
-        </div>
-        <div class="row">
-          <div class="field">
-            <label>Nume și prenume <span class="req">*</span></label>
-            <input type="text" class="ins-nume" placeholder="Nume însoțitor" />
-          </div>
-          <div class="field">
-            <label>Mărime tricou <span class="req">*</span></label>
-            <select class="ins-tricou">
-              <option value="">— selectează —</option>
-              <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
-            </select>
-          </div>
-        </div>
-      `;
-      list.appendChild(div);
-      updateCounter();
-    }
-
-    function removeCompanion(id) {
-      const el = document.getElementById('companion-' + id);
-      if (el) el.remove();
-      updateCounter();
-    }
-
-    function updateCounter() {
-      const n = document.querySelectorAll('.companion-card').length;
-      document.getElementById('counter').textContent =
-        n === 0 ? '0 însoțitori adăugați' : n + (n === 1 ? ' însoțitor adăugat' : ' însoțitori adăugați');
-    }
-
     async function submitForm() {
       const nume = document.getElementById('sportiv-nume').value.trim();
-      const sport = document.getElementById('sportiv-sport').value.trim();
+      const tricou = document.getElementById('sportiv-tricou').value;
+      const gdpr1 = document.getElementById('gdpr1').checked;
+      const gdpr2 = document.getElementById('gdpr2').checked;
 
-      if (!nume || !sport) {
-        alert('Te rugăm completează numele și sportul tău.');
+      if (!nume || !tricou) {
+        alert('Te rugăm completează numele și mărimea tricou.');
         return;
       }
 
-      const companions = [];
-      let valid = true;
-      document.querySelectorAll('.companion-card').forEach(card => {
-        const n = card.querySelector('.ins-nume').value.trim();
-        const t = card.querySelector('.ins-tricou').value;
-        if (!n || !t) { valid = false; }
-        companions.push({ nume: n, tricou: t });
-      });
-
-      if (companions.length === 0) {
-        alert('Te rugăm adaugă cel puțin un însoțitor.');
-        return;
-      }
-
-      if (!valid) {
-        alert('Te rugăm completează numele și mărimea tricou pentru toți însoțitorii.');
+      if (!gdpr1 || !gdpr2) {
+        alert('Te rugăm bifați ambele acorduri obligatorii pentru a continua.');
         return;
       }
 
@@ -306,7 +292,7 @@
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sportiv: nume, sport: sport, insotitori: companions })
+          body: JSON.stringify({ nume: nume, tricou: tricou })
         });
 
         document.getElementById('form-content').style.display = 'none';
