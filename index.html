@@ -147,6 +147,14 @@
     .success-icon { font-size: 56px; margin-bottom: 1rem; }
     .success-title { font-size: 20px; font-weight: 700; margin-bottom: 0.5rem; }
     .success-sub { font-size: 14px; color: #666; line-height: 1.6; }
+    .closed {
+      display: none;
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    .closed-icon { font-size: 56px; margin-bottom: 1rem; }
+    .closed-title { font-size: 20px; font-weight: 700; margin-bottom: 0.75rem; color: #1a1a1a; }
+    .closed-sub { font-size: 14px; color: #666; line-height: 1.6; }
     @media (max-width: 400px) { .row { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -192,7 +200,7 @@
       </div>
 
       <button class="btn-submit" id="btn-submit" onclick="submitForm()">Trimite înregistrarea</button>
-      <p class="deadline">⏳ Deadline: 12 mai 2026</p>
+      <p class="deadline">⏳ Deadline: 17 mai 2026</p>
     </div>
 
     <div class="card success" id="success">
@@ -200,11 +208,24 @@
       <p class="success-title">Înregistrare trimisă!</p>
       <p class="success-sub">Datele au fost salvate cu succes.<br>Ne vedem pe 23 mai la Rondul Kiseleff! 🎉</p>
     </div>
+
+    <div class="card closed" id="closed">
+      <div class="closed-icon">🔒</div>
+      <p class="closed-title">Înscrierile s-au încheiat!</p>
+      <p class="closed-sub">Înscrierile pentru GO Scholarship | Race for the Cure s-au încheiat.<br><br>Mulțumim tuturor celor care s-au înscris!<br>Ne vedem pe 23 mai la Rondul Kiseleff 🏃‍♂️</p>
+    </div>
   </div>
 
   <script>
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycby1IfOWruJdUXeJngvSC5rVBjPYxrnNtZ53s_7Lxqc1n64ihsTiomx-dDTb_RTk8NyXlQ/exec';
     let count = 0;
+
+    // Verifica daca inscrierile sunt inchise (dupa 17 mai 2026)
+    const deadline = new Date('2026-05-18T00:00:00');
+    if (new Date() >= deadline) {
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('closed').style.display = 'block';
+    }
 
     function addCompanion() {
       count++;
