@@ -240,7 +240,7 @@
       </div>
 
       <button class="btn-submit" id="btn-submit" onclick="submitForm()">Trimite înregistrarea</button>
-      <p class="deadline">⏳ Deadline: 17 mai 2026</p>
+      <p class="deadline">⏳ Deadline: 12 mai 2026</p>
     </div>
 
     <div class="card success" id="success">
@@ -259,7 +259,7 @@
   <script>
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycby1IfOWruJdUXeJngvSC5rVBjPYxrnNtZ53s_7Lxqc1n64ihsTiomx-dDTb_RTk8NyXlQ/exec';
 
-    // Verifica daca inscrierile sunt inchise (dupa 17 mai 2026)
+    // Verifica daca inscrierile sunt inchise (dupa 12 mai 2026)
     const deadline = new Date('2026-05-18T00:00:00');
     if (new Date() >= deadline) {
       document.getElementById('form-content').style.display = 'none';
