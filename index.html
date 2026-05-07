@@ -3,48 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Înscriere Însoțitori – Race for the Cure 2026</title>
+  <title>GO Scholarship | Race for the Cure</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f5;
+      background: linear-gradient(135deg, #f0f4ff 0%, #fef0f5 100%);
+      min-height: 100vh;
       color: #1a1a1a;
-      padding: 1.5rem 1rem;
+      padding: 2rem 1rem;
     }
     .wrap { max-width: 560px; margin: 0 auto; }
-    .header { text-align: center; margin-bottom: 1.5rem; }
-    .header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-    .header p { font-size: 13px; color: #666; }
+    .header { text-align: center; margin-bottom: 1.75rem; }
+    .header-title { margin-bottom: 12px; }
+    .header-go {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #e8318a, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .header-race {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+    .notice {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #7a5c00;
+      line-height: 1.6;
+      text-align: left;
+    }
     .card {
       background: #fff;
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
+      border: 1px solid #e8e8e8;
+      border-radius: 14px;
       padding: 1.25rem 1.5rem;
       margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .card-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #e8318a22, #f9731622);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
     .field { margin-bottom: 12px; }
     .field:last-child { margin-bottom: 0; }
-    label { display: block; font-size: 13px; color: #555; margin-bottom: 4px; }
-    .req { color: #e53e3e; }
+    label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
+    .req { color: #e8318a; }
     input[type=text], select {
       width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      padding: 9px 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 9px;
       font-size: 14px;
-      background: #fff;
+      background: #fafafa;
       color: #1a1a1a;
+      transition: border-color 0.2s;
     }
     input[type=text]:focus, select:focus {
       outline: none;
-      border-color: #4a90e2;
+      border-color: #e8318a;
+      background: #fff;
     }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .companion-card {
-      background: #f9f9f9;
-      border: 1px solid #e5e5e5;
+      background: #fdf4f8;
+      border: 1.5px solid #f5d0e3;
       border-radius: 10px;
       padding: 1rem;
       margin-bottom: 10px;
@@ -55,85 +103,89 @@
       align-items: center;
       margin-bottom: 12px;
     }
-    .companion-title { font-size: 14px; font-weight: 500; }
+    .companion-title { font-size: 14px; font-weight: 600; color: #c0185e; }
     .btn-remove {
       font-size: 12px;
       color: #e53e3e;
-      background: none;
-      border: 1px solid #e53e3e;
+      background: #fff0f0;
+      border: 1px solid #fca5a5;
       border-radius: 6px;
       padding: 3px 10px;
       cursor: pointer;
     }
+    .btn-remove:hover { background: #ffe0e0; }
     .btn-add {
       width: 100%;
-      padding: 9px;
-      border-radius: 8px;
-      background: #f5f5f5;
-      border: 1px dashed #ccc;
-      color: #555;
+      padding: 10px;
+      border-radius: 9px;
+      background: #fdf4f8;
+      border: 1.5px dashed #e8318a88;
+      color: #e8318a;
       font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
       margin-bottom: 1rem;
     }
-    .btn-add:hover { background: #ececec; }
+    .btn-add:hover { background: #fce8f3; }
     .btn-submit {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border-radius: 10px;
-      background: #4a90e2;
+      background: linear-gradient(135deg, #e8318a, #f97316);
       border: none;
       color: #fff;
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
+      box-shadow: 0 4px 14px rgba(232,49,138,0.3);
     }
-    .btn-submit:hover { background: #357abd; }
+    .btn-submit:hover { opacity: 0.92; }
     .btn-submit:disabled { opacity: 0.6; pointer-events: none; }
-    .counter { font-size: 12px; color: #888; margin-bottom: 10px; }
-    .success {
-      display: none;
-      text-align: center;
-      padding: 2.5rem 1rem;
-    }
-    .success-icon { font-size: 52px; margin-bottom: 1rem; }
-    .success-title { font-size: 18px; font-weight: 600; margin-bottom: 0.5rem; }
-    .success-sub { font-size: 14px; color: #666; }
-    .deadline {
-      text-align: center;
-      font-size: 12px;
-      color: #888;
-      margin-top: 10px;
-    }
-    @media (max-width: 400px) {
-      .row { grid-template-columns: 1fr; }
-    }
+    .counter { font-size: 12px; color: #999; margin-bottom: 10px; }
+    .deadline { text-align: center; font-size: 12px; color: #999; margin-top: 10px; }
+    .success { display: none; text-align: center; padding: 2.5rem 1rem; }
+    .success-icon { font-size: 56px; margin-bottom: 1rem; }
+    .success-title { font-size: 20px; font-weight: 700; margin-bottom: 0.5rem; }
+    .success-sub { font-size: 14px; color: #666; line-height: 1.6; }
+    @media (max-width: 400px) { .row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="header">
-      <h1>🏃 Race for the Cure 2026</h1>
-      <p>Înscriere însoțitori – GO Scholarship</p>
+      <div class="header-title">
+        <span class="header-go">GO Scholarship</span>
+        <span class="header-race">🏃‍♂️ Race for the Cure</span>
+      </div>
+      <div class="notice">
+        ⚠️ Acest formular se completează doar de către sportivii care vin însoțiți.<br>
+        Dacă nu aveți însoțitori, nu este necesar să completați acest formular.
+      </div>
     </div>
 
     <div id="form-content">
       <div class="card">
-        <p class="card-title">Cine completează?</p>
+        <p class="card-title">
+          <span class="card-title-icon">👤</span>
+          Cine completează?
+        </p>
         <div class="row">
           <div class="field">
             <label>Numele tău <span class="req">*</span></label>
             <input type="text" id="sportiv-nume" placeholder="Nume și prenume" />
           </div>
           <div class="field">
-            <label>Sportul tău <span class="req">*</span></label>
+            <label>Sportul practicat <span class="req">*</span></label>
             <input type="text" id="sportiv-sport" placeholder="ex. Tenis, Înot..." />
           </div>
         </div>
       </div>
 
       <div class="card">
-        <p class="card-title">Însoțitori</p>
+        <p class="card-title">
+          <span class="card-title-icon">👥</span>
+          Însoțitori
+        </p>
         <p class="counter" id="counter">0 însoțitori adăugați</p>
         <div id="companions-list"></div>
         <button class="btn-add" onclick="addCompanion()">+ Adaugă însoțitor</button>
@@ -146,7 +198,7 @@
     <div class="card success" id="success">
       <div class="success-icon">✅</div>
       <p class="success-title">Înregistrare trimisă!</p>
-      <p class="success-sub">Datele au fost salvate. Ne vedem pe 23 mai la Rondul Kiseleff! 🎉</p>
+      <p class="success-sub">Datele au fost salvate cu succes.<br>Ne vedem pe 23 mai la Rondul Kiseleff! 🎉</p>
     </div>
   </div>
 
@@ -213,6 +265,11 @@
         companions.push({ nume: n, tricou: t });
       });
 
+      if (companions.length === 0) {
+        alert('Te rugăm adaugă cel puțin un însoțitor.');
+        return;
+      }
+
       if (!valid) {
         alert('Te rugăm completează numele și mărimea tricou pentru toți însoțitorii.');
         return;
@@ -241,4 +298,3 @@
   </script>
 </body>
 </html>
-EOF
