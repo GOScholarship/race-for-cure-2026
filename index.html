@@ -165,7 +165,7 @@
         <span class="header-go">GO Scholarship</span>
         <span class="header-race">🏃‍♂️ Race for the Cure</span>
       </div>
-      <div class="notice">
+      <div id="header-notice" class="notice">
         ⚠️ Acest formular se completează doar de către sportivii care vin însoțiți.<br>
         Dacă nu aveți însoțitori, nu este necesar să completați acest formular.
       </div>
@@ -224,6 +224,7 @@
     const deadline = new Date('2026-05-18T00:00:00');
     if (new Date() >= deadline) {
       document.getElementById('form-content').style.display = 'none';
+      document.getElementById('header-notice').style.display = 'none';
       document.getElementById('closed').style.display = 'block';
     }
 
